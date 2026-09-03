@@ -153,6 +153,8 @@ try:
     qqq  = yf.download("QQQ",  start="2020-01-01", end="2026-09-01", progress=False)["Close"]
     tqqq = yf.download("TQQQ", start="2020-01-01", end="2026-09-01", progress=False)["Close"]
     spy_ret = spy.pct_change().dropna()
+    qqq_ret = qqq.pct_change().dropna()
+    tqqq_ret = tqqq.pct_change().dropna()
 except Exception as e:
     print(f"Data download error: {e}")
     print("Saving error state and exiting.")
@@ -162,7 +164,8 @@ except Exception as e:
 
 # Align data
 common_idx = spy_ret.index
-returns_df = pd.DataFrame({"SPY": spy_ret}).reindex(common_idx).dropna()
+returns_df = pd.DataFrame(index=common_idx)
+returns_df["SPY"] = spy_ret
 
 # ── Run strategies ────────────────────────────────────────────────────────────
 all_results = []
